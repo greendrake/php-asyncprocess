@@ -1,0 +1,36 @@
+{
+    "name": "greendrake/php-asyncprocess",
+    "type": "library",
+    "description": "ReactPHP Promise implementation for truly asynchronous background processes",
+    "version": "1.0.0",
+    "authors": [
+        {
+            "name": "Eugene Greendrake",
+            "email": "eugene@greendrake.info",
+            "role": "Developer"
+        }
+    ],
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "async",
+        "asynchronous",
+        "promise",
+        "background",
+        "process"
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=8.2.0",
+        "react/promise": "3.x-dev",
+        "react/http": "1.x-dev",
+        "react/async": "4.x-dev"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "10"
+    },
+    "autoload": {
+        "psr-4": {
+            "Greendrake\\AsyncProcess\\": ["src/", "test/"]
+        }
+    }
+}
