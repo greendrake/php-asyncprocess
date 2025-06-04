@@ -1,16 +1,18 @@
 <?php
 declare (strict_types = 1);
 namespace Greendrake\AsyncProcess;
+
 use Ds\Set;
 use function React\Async\await;
 use Psr\Http\Message\RequestInterface as Request;
 use React\Http\Browser;
-use React\Http\Server;
+use React\Http\HttpServer;
 use React\Promise as BasePromise;
 use React\Socket\ConnectionInterface;
 use React\Socket\Server as SocketServer;
 
-class Promise {
+class Promise
+{
 
     protected BasePromise\Deferred $deferred;
     protected BasePromise\Promise $promise;
@@ -19,7 +21,8 @@ class Promise {
     private static $sigHoldHandlerSetup = false;
     private static $sigHoldDefaultHandler;
 
-    public function __construct(protected string $command) {
+    public function __construct(protected string $command)
+    {
         $this->deferred = new BasePromise\Deferred;
         $this->promise = $this->deferred->promise();
         if (!self::$sigHoldHandlerSetup) {
@@ -64,7 +67,7 @@ class Promise {
                 });
             });
             // Actually run the one-off HTTP server to wait for what the forked process has to say:
-            $server = new Server(function (Request $request) use (&$result) {
+            $server = new HttpServer(function (Request $request) use (&$result) {
                 $result = unserialize((string) $request->getBody());
             });
             $server->listen($socket);
@@ -74,12 +77,12 @@ class Promise {
             pcntl_signal(SIGCHLD, self::$sigHoldDefaultHandler);
             $browser = new Browser;
             // Define the function that will report results back to the parent:
-            $reportBack = function (int $forkExitCode = 0, ?int $jobExitCode = null, ?array $result = null, ?\Throwable $error = null) use ($browser, $httpAddress) {
+            $reportBack = function (int $forkExitCode = 0, ?int $jobExitCode = null, ?array $result = null,  ? \Throwable $error = null) use ($browser, $httpAddress) {
                 await($browser->post('http://' . $httpAddress, [], serialize([
                     'success' => $error === null,
                     'result' => $result,
                     'code' => $jobExitCode,
-                    'error' => $error,
+                    'error' => $error
                 ]))->catch(function () {
                     // Don't give a fuck. This is the forked background process, and if anything is wrong, no one is gonna hear anyway.
                 }));
@@ -127,7 +130,8 @@ class Promise {
         }
     }
 
-    public function getPid(): int {
+    public function getPid(): int
+    {
         return $this->pid;
     }
 
@@ -136,7 +140,8 @@ class Promise {
         return $this->promise;
     }
 
-    private static function findUnusedPort(): int {
+    private static function findUnusedPort(): int
+    {
         $tried = new Set;
         $add = function (int $port) use ($tried) {
             $tried->add($port);
@@ -148,7 +153,8 @@ class Promise {
         return $port;
     }
 
-    private static function isPortOpen(int $port): bool {
+    private static function isPortOpen(int $port): bool
+    {
         $result = false;
         try {
             if ($pf = fsockopen('127.0.0.1', $port)) {

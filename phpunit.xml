@@ -1,4 +1,9 @@
-<phpunit colors="true" bootstrap="src/bootstrap.php">
+<phpunit colors="true" bootstrap="src/bootstrap.php"
+        displayDetailsOnTestsThatTriggerDeprecations="true"
+        displayDetailsOnTestsThatTriggerErrors="true"
+        displayDetailsOnTestsThatTriggerNotices="true"
+        displayDetailsOnTestsThatTriggerWarnings="true"
+        displayDetailsOnPhpunitDeprecations="true">
     <testsuites>
         <testsuite name="default">
             <directory>test/</directory>
